@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 // so plain JavaScript numbers are safe and much easier to work with.
 pg.types.setTypeParser(20, (v) => Number(v));
 pg.types.setTypeParser(1700, (v) => Number(v));
+pg.types.setTypeParser(1082, (v) => v);          // a calendar day stays the text "2026-11-10"; no time-zone shifting
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const url = process.env.DATABASE_URL || 'postgres://shushop:shushop@localhost:5432/shushop';
