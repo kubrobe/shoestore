@@ -1,0 +1,130 @@
+erDiagram
+    USERS ||--o{ ADDRESSES : "has"
+    USERS ||--o{ SESSIONS : "signed in with"
+    USERS ||--o{ ORDERS : "places"
+    USERS ||--o{ CART_ITEMS : "has in cart"
+    USERS ||--o{ FAVOURITES : "saves"
+    USERS ||--o{ STOCK_ALERTS : "waits for"
+    USERS ||--o{ REVIEWS : "writes"
+    USERS ||--o{ NOTIFICATIONS : "receives"
+    BRANDS ||--o{ PRODUCTS : "makes"
+    PRODUCTS ||--o{ VARIANTS : "comes in"
+    PRODUCTS ||--o{ REVIEWS : "gets"
+    PRODUCTS ||--o{ FAVOURITES : "is saved in"
+    PRODUCTS ||--o{ STOCK_ALERTS : "is waited for in"
+    VARIANTS ||--o{ CART_ITEMS : "is in"
+    ORDERS ||--|{ ORDER_ITEMS : "contains"
+    ORDERS ||--o{ ORDER_STATUS_LOG : "has history"
+    VARIANTS ||--o{ ORDER_ITEMS : "was bought as"
+    COUPONS }o..o{ ORDERS : "code copied into"
+
+    USERS {
+        int id PK
+        text email UK
+        text password_hash "bcrypt"
+        text full_name
+        text phone
+        text role "customer | admin"
+        smallint shoe_size_eu
+    }
+    ADDRESSES {
+        int id PK
+        int user_id FK
+        text label
+        text line
+        text city
+        text phone
+        bool is_default
+    }
+    SESSIONS {
+        text token_hash PK "SHA-256 of the token"
+        int user_id FK
+        timestamptz expires_at
+    }
+    BRANDS {
+        int id PK
+        text name UK
+    }
+    PRODUCTS {
+        int id PK
+        int brand_id FK
+        text name
+        text type
+        text category "men | women | kids | unisex"
+        bigint price "so'm"
+        bigint old_price "set = on sale"
+        text art_style
+        text image_url
+        bool is_active
+    }
+    VARIANTS {
+        int id PK
+        int product_id FK
+        smallint size "EU"
+        text color_name
+        text color_hex
+        int stock "never below 0"
+    }
+    REVIEWS {
+        int id PK
+        int product_id FK
+        int user_id FK
+        smallint rating "1-5"
+        text comment
+    }
+    FAVOURITES {
+        int user_id PK
+        int product_id PK
+    }
+    STOCK_ALERTS {
+        int user_id PK
+        int product_id PK
+    }
+    CART_ITEMS {
+        int user_id PK
+        int variant_id PK
+        int qty "1-10"
+    }
+    COUPONS {
+        text code PK
+        smallint percent
+        bigint min_total
+        bool active
+    }
+    ORDERS {
+        int id PK
+        int user_id FK
+        text status "new .. delivered | cancelled"
+        bigint subtotal
+        bigint shipping_fee
+        bigint discount
+        bigint total
+        text coupon_code
+        text address_line
+        text payment_method
+    }
+    ORDER_ITEMS {
+        int id PK
+        int order_id FK
+        int variant_id FK
+        text product_name "copied at checkout"
+        smallint size
+        bigint unit_price "copied at checkout"
+        int qty
+    }
+    ORDER_STATUS_LOG {
+        int id PK
+        int order_id FK
+        text status
+        int changed_by FK
+    }
+    NOTIFICATIONS {
+        int id PK
+        int user_id FK
+        text kind "drop | restock | price_drop | order"
+        text title
+        text body
+        int product_id FK
+        int order_id FK
+        bool is_read
+    }

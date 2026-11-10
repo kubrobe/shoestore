@@ -14,8 +14,8 @@ export async function startApp() {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const base = `http://127.0.0.1:${server.address().port}`;
 
-  async function call(method, path, { body, token, cookie } = {}) {
-    const headers = {};
+  async function call(method, path, { body, token, cookie, headers: extra } = {}) {
+    const headers = { ...extra };
     if (body !== undefined) headers['content-type'] = 'application/json';
     if (token) headers.authorization = `Bearer ${token}`;
     if (cookie) headers.cookie = cookie;

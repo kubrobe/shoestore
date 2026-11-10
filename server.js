@@ -28,6 +28,12 @@ app.use((_req, res, next) => {
 });
 
 app.use(express.json({ limit: '50kb' }));
+
+// Some Java HTTP clients cannot send PATCH, so the Android app sends POST with "X-HTTP-Method-Override: PATCH".
+app.use((req, _res, next) => {
+  if (req.method === 'POST' && String(req.headers['x-http-method-override'] || '').toUpperCase() === 'PATCH') req.method = 'PATCH';
+  next();
+});
 app.use(cookieParser());
 app.use(loadUser);                        // sets req.user when logged in
 

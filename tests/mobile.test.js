@@ -16,6 +16,14 @@ test('the phone sync needs a login', async () => {
   assert.equal((await t.call('GET', '/api/mobile/sync')).status, 401);
 });
 
+test('the app can send PATCH as POST with a method-override header', async () => {
+  const r = await t.call('POST', '/api/me', { token: app, body: { shoeSizeEu: 43 }, headers: { 'x-http-method-override': 'PATCH' } });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.user.shoeSizeEu, 43);
+  assert.equal((await t.call('POST', '/api/me', { token: app, body: { shoeSizeEu: 42 } })).status, 404);   // without the header there is no such route
+  await t.call('PATCH', '/api/me', { token: app, body: { shoeSizeEu: 42 } });
+});
+
 test('one sync call carries everything the phone stores offline', async () => {
   const s = (await t.call('GET', '/api/mobile/sync', { token: app })).body;
   assert.equal(s.user.email, 'alex@demo.uz');

@@ -9,7 +9,9 @@
     "dev": "node --watch server.js",
     "db:reset": "node db/reset.js",
     "db:build-sql": "node db/build-supabase-sql.js",
-    "test": "node --test --test-concurrency=1"
+    "test": "node --test --test-concurrency=1",
+    "user:password": "node db/user-tool.js password",
+    "user:admin": "node db/user-tool.js admin"
   },
   "engines": {
     "node": ">=20"
