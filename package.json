@@ -1,0 +1,24 @@
+{
+  "name": "shushop",
+  "version": "1.0.0",
+  "description": "Shushop - online shoe store: website + REST API shared with the Android app",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:reset": "node db/reset.js",
+    "db:build-sql": "node db/build-supabase-sql.js",
+    "test": "node --test --test-concurrency=1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "pg": "^8.16.3"
+  }
+}

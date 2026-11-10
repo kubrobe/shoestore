@@ -1,0 +1,16 @@
+# Render "Blueprint": describes the web service. Secrets are NOT stored here; you enter them in the Render dashboard.
+services:
+  - type: web
+    name: shushop
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false        # paste your Supabase connection string in the dashboard
+      - key: DB_SSL_CA
+        sync: false        # only if your database is not on Supabase (see docs/DEPLOY.md)
